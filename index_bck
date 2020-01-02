@@ -1,24 +1,62 @@
-<!doctype html>
-<html lang="en" ng-app>
-  <head>
-    <meta charset="utf-8">
-    <title>My HTML File</title>
-    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css" />
-    <script src="lib/angular/angular.js"></script>
-  </head>
-  <body>
+ <main>
 
-    <p>Nothing here {{'yet' + '!'}}</p>
-	<p>1 + 2 = {{1 + 2}}</p>
-  </body>
-</html>
+    <header class="searchForm-container">
+      <form class="searchForm">
+        <input type="search" class="searchForm-input">
+        <button type="submit" class="icon searchIcon">
+          Szukaj!
+        </button>
+      </form>
+    </header>
 
+    <section class="searchResults"></section>
 
-//prop=info
-//inprop=url&
-.catch(() => console.log('An error occurred'))
-<a href="${url}" class="resultItem-link" target="_blank" rel="noopener">${url}</a>
-  <a href="${url}" target="_blank" rel="noopener">${result.title}</a>
-  <span class="resultItem-snippet">${result.snippet}</span><br>
-  
-  
+	  <script>function handleSubmit(event) {
+    // prevent page from reloading when form is submitted
+  event.preventDefault();
+  // get the value of the input field
+  const input = document.querySelector('.searchForm-input').value;
+  // remove whitespace from the input
+  const searchQuery = input.trim();
+  // call `fetchResults` and pass it the `searchQuery`
+  fetchResults(searchQuery);
+}
+</script>
+<script>
+function fetchResults(searchQuery) {
+	  const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=&format=json&origin=*&srlimit=1&srsearch=${searchQuery}`;
+		fetch(endpoint)
+			.then(response => response.json())
+			.then(data => {
+				const results = data.query.search;
+				displayResults(results);
+				});
+}
+</script>
+<script>
+function displayResults(results) {
+  // Store a reference to `.searchResults`
+  const searchResults = document.querySelector('.searchResults');
+  // Remove all child elements
+  searchResults.innerHTML = '';
+  // Loop over results array
+  results.forEach(result => {
+   const url = encodeURI(`https://en.wikipedia.org/wiki/${result.title}`);
+   searchResults.insertAdjacentHTML('beforeend',
+      `<div class="resultItem">
+        <h3 class="resultItem-title">
+        ${result.title}
+        </h3>
+        <span class="resultItem-snippet">${result.snippet}</span><br>
+        
+      </div>`
+    );
+  });
+}
+</script>
+<script>
+	const form = document.querySelector('.searchForm');
+	form.addEventListener('submit', handleSubmit);
+</script>
+  </main>
+
