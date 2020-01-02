@@ -1,62 +1,63 @@
  <main>
 
-    <header class="searchForm-container">
-      <form class="searchForm">
-        <input type="search" class="searchForm-input">
-        <button type="submit" class="icon searchIcon">
-          Szukaj!
-        </button>
-      </form>
-    </header>
+<header class="searchForm-container">
+<form class="searchForm">
+<input type="search" class="searchForm-input">
+<button type="submit" class="icon searchIcon">
+	Szukaj!
+</button>
+</form>
+</header>
 
-    <section class="searchResults"></section>
+<section class="searchResults"></section>
 
-	  <script>function handleSubmit(event) {
-    // prevent page from reloading when form is submitted
-  event.preventDefault();
-  // get the value of the input field
-  const input = document.querySelector('.searchForm-input').value;
-  // remove whitespace from the input
-  const searchQuery = input.trim();
-  // call `fetchResults` and pass it the `searchQuery`
-  fetchResults(searchQuery);
+<script>function on_submit(event) {
+	event.preventDefault();
+	const phrase = document.querySelector('.searchForm-input').value;
+	const phrase_stripped = phrase.trim();
+	get_wiki_response(phrase_stripped);
 }
 </script>
+
 <script>
-function fetchResults(searchQuery) {
-	  const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=&format=json&origin=*&srlimit=1&srsearch=${searchQuery}`;
-		fetch(endpoint)
-			.then(response => response.json())
-			.then(data => {
-				const results = data.query.search;
-				displayResults(results);
-				});
+function get_wiki_response(search_phrase) {
+// endpoint z mediawik api: https://www.mediawiki.org/wiki/API:Main_page/pl
+// pola: 	action 				- zapytanie
+//			format odpowiedzi 	- json
+//			limit odpowiedzi   	- 1
+const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=&format=json&origin=*&srlimit=1&srsearch=${search_phrase}`;
+fetch(endpoint)
+	.then(function (response){
+		return response.json();
+	})
+	.then(function (data) {
+		const query_result = data.query.search;
+		print_results(query_result);
+	})
 }
 </script>
+
 <script>
-function displayResults(results) {
-  // Store a reference to `.searchResults`
-  const searchResults = document.querySelector('.searchResults');
-  // Remove all child elements
-  searchResults.innerHTML = '';
-  // Loop over results array
-  results.forEach(result => {
-   const url = encodeURI(`https://en.wikipedia.org/wiki/${result.title}`);
-   searchResults.insertAdjacentHTML('beforeend',
-      `<div class="resultItem">
-        <h3 class="resultItem-title">
-        ${result.title}
-        </h3>
-        <span class="resultItem-snippet">${result.snippet}</span><br>
-        
-      </div>`
+function print_results(results) {
+	const results_dom = document.querySelector('.searchResults');
+	results_dom.innerHTML = '';
+	results.forEach(result => {
+	const url = encodeURI(`https://en.wikipedia.org/wiki/${result.title}`);
+	results_dom.insertAdjacentHTML('beforeend',
+		`<div class="resultItem">
+			<h3 class="resultItem-title">
+				${result.title}
+			</h3>
+			<span class="resultItem-snippet">${result.snippet}</span><br>
+		</div>`
     );
   });
 }
 </script>
+
 <script>
 	const form = document.querySelector('.searchForm');
-	form.addEventListener('submit', handleSubmit);
+	form.addEventListener('submit', on_submit);
 </script>
-  </main>
+</main>
 
