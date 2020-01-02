@@ -1,0 +1,9 @@
+<html ng-app> //deklaracja ze Angular jest glownym elementem aplikacji
+
+<script src="lib/angular/angular.js"></script> 
+//sprawia że po ściągnięciu strony bootstrapowany jest Angular
+{{}}
+// odpowiednik %eval() w SAS									
+
+<meta charset="utf-8"> //definicja kodowanie znaków
+<title>My HTML File</title> //tytuł/nagłówek strony
