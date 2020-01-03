@@ -9,8 +9,8 @@
 </form>
 </header>
 
-<section class="searchResults"></section>
-
+<p id="Title_box">tytul</p>
+<p id = "Results_box">wyniki</p>
 <script>function on_submit(event) {
 	event.preventDefault();
 	const phrase = document.querySelector('.searchForm-input').value;
@@ -39,19 +39,10 @@ fetch(endpoint)
 
 <script>
 function print_results(results) {
-	const results_dom = document.querySelector('.searchResults');
-	results_dom.innerHTML = '';
 	results.forEach(result => {
-	const url = encodeURI(`https://en.wikipedia.org/wiki/${result.title}`);
-	results_dom.insertAdjacentHTML('beforeend',
-		`<div class="resultItem">
-			<h3 class="resultItem-title">
-				${result.title}
-			</h3>
-			<span class="resultItem-snippet">${result.snippet}</span><br>
-		</div>`
-    );
-  });
+		document.getElementById("Title_box").innerHTML = result.title;
+		document.getElementById("Results_box").innerHTML = result.snippet;	
+	});
 }
 </script>
 
@@ -60,4 +51,3 @@ function print_results(results) {
 	form.addEventListener('submit', on_submit);
 </script>
 </main>
-
